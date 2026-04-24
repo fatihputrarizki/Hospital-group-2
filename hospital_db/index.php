@@ -6,26 +6,35 @@ include "includes/navbar.php";
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 ?>
 
-<div class="container">
-<?php
-$allowed = ['dashboard','patients','doctors','appointments','records','medications','prescriptions'];
-if (in_array($page, $allowed)) {
-    include "pages/{$page}.php";
-} else {
-    include "pages/dashboard.php";
-}
-?>
-</div>
+<main class="main-content">
+    <div class="content-wrapper">
+        <?php
+        $allowed = ['dashboard','patients','doctors','appointments','records','medications','prescriptions'];
+        if (in_array($page, $allowed)) {
+            include "pages/{$page}.php";
+        } else {
+            include "pages/dashboard.php";
+        }
+        ?>
+    </div>
+</main>
 
 <!-- ===== MODAL KONFIRMASI HAPUS ===== -->
 <div class="modal-overlay" id="deleteModal">
     <div class="modal">
-        <h3>⚠️ Konfirmasi Hapus</h3>
+        <div class="modal-icon">
+            <i class='bx bxs-error-circle'></i>
+        </div>
+        <h3>Konfirmasi Hapus</h3>
         <p>Yakin ingin menghapus data <strong id="deleteItemName"></strong>?<br>
-           <small style="color:#6b7280">Data yang dihapus tidak bisa dikembalikan.</small></p>
+           <small>Data yang dihapus tidak bisa dikembalikan.</small></p>
         <div class="modal-actions">
-            <button class="btn btn-secondary" onclick="closeDeleteModal()">Batal</button>
-            <a id="confirmDeleteBtn" class="btn btn-danger" href="#">Hapus</a>
+            <button class="btn btn-secondary" onclick="closeDeleteModal()">
+                <i class='bx bx-x'></i> Batal
+            </button>
+            <a id="confirmDeleteBtn" class="btn btn-danger" href="#">
+                <i class='bx bx-trash'></i> Hapus
+            </a>
         </div>
     </div>
 </div>
