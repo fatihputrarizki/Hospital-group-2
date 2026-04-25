@@ -29,6 +29,9 @@
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Prevent flash of light theme on dark mode */
+html.dark-mode-loading { background: #0b1120; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -510,4 +513,182 @@ tbody tr:hover { background: #f0fdfa; }
 
 @media (max-width: 480px) {
     .stats-grid { grid-template-columns: 1fr; }
+}
+
+/* =============================================================
+   DARK MODE TOGGLE BUTTON
+   ============================================================= */
+.theme-toggle {
+    position: relative;
+    width: 44px; height: 44px;
+    border: none; border-radius: 12px;
+    cursor: pointer;
+    background: #f1f5f9;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition);
+    overflow: hidden;
+}
+.theme-toggle:hover {
+    background: #e2e8f0;
+    transform: rotate(15deg) scale(1.05);
+}
+.theme-toggle i {
+    position: absolute;
+    font-size: 20px;
+    transition: all .4s cubic-bezier(.4,0,.2,1);
+}
+#themeIconLight {
+    color: #f59e0b;
+    opacity: 1; transform: rotate(0) scale(1);
+}
+#themeIconDark {
+    color: #6366f1;
+    opacity: 0; transform: rotate(-90deg) scale(0);
+}
+
+/* When dark mode is active, swap icons */
+body.dark-mode #themeIconLight {
+    opacity: 0; transform: rotate(90deg) scale(0);
+}
+body.dark-mode #themeIconDark {
+    opacity: 1; transform: rotate(0) scale(1);
+}
+
+/* =============================================================
+   DARK MODE THEME
+   ============================================================= */
+body.dark-mode {
+    --body-bg: #0b1120;
+    --card-bg: #151d30;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --border: #1e293b;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.35);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
+    --sidebar-bg: #070d1a;
+    --sidebar-hover: #111827;
+}
+
+/* --- Dark: Scrollbar --- */
+body.dark-mode::-webkit-scrollbar-thumb { background: #334155; }
+body.dark-mode::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* --- Dark: Sidebar --- */
+body.dark-mode .sidebar {
+    border-right-color: rgba(255,255,255,.04);
+}
+body.dark-mode .sidebar-header {
+    border-bottom-color: rgba(255,255,255,.05);
+}
+body.dark-mode .sidebar-footer {
+    border-top-color: rgba(255,255,255,.05);
+}
+
+/* --- Dark: Topbar --- */
+body.dark-mode .topbar {
+    background: rgba(11,17,32,.88);
+    border-bottom-color: #1e293b;
+}
+body.dark-mode .topbar-toggle { color: #e2e8f0; }
+body.dark-mode .breadcrumb-sep { color: #334155; }
+
+/* --- Dark: Theme toggle button --- */
+body.dark-mode .theme-toggle {
+    background: #1e293b;
+}
+body.dark-mode .theme-toggle:hover {
+    background: #334155;
+}
+
+/* --- Dark: Alerts --- */
+body.dark-mode .alert-success {
+    background: rgba(16,185,129,.12); color: #6ee7b7;
+    border-left-color: #10b981;
+}
+body.dark-mode .alert-error {
+    background: rgba(239,68,68,.12); color: #fca5a5;
+    border-left-color: #ef4444;
+}
+
+/* --- Dark: Cards --- */
+body.dark-mode .card {
+    border-color: #1e293b;
+}
+body.dark-mode .card h3 {
+    border-bottom-color: #1e293b;
+}
+
+/* --- Dark: Forms --- */
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background: #0f172a;
+    border-color: #1e293b;
+    color: #e2e8f0;
+}
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+    background: #151d30;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13,148,136,.2);
+}
+body.dark-mode .form-group input::placeholder { color: #475569; }
+body.dark-mode .form-group select option {
+    background: #151d30; color: #e2e8f0;
+}
+
+/* --- Dark: Buttons --- */
+body.dark-mode .btn-secondary {
+    background: #1e293b; color: #94a3b8;
+    border-color: #334155;
+}
+body.dark-mode .btn-secondary:hover { background: #334155; }
+
+/* --- Dark: Tables --- */
+body.dark-mode .table-container {
+    border-color: #1e293b;
+}
+body.dark-mode .table-top {
+    border-bottom-color: #1e293b;
+}
+body.dark-mode .table-top input {
+    background: #0f172a; border-color: #1e293b; color: #e2e8f0;
+}
+body.dark-mode .table-top input:focus {
+    background: #151d30;
+}
+body.dark-mode tbody tr {
+    border-bottom-color: #1e293b;
+}
+body.dark-mode tbody tr:hover { background: rgba(13,148,136,.08); }
+
+/* --- Dark: Badges --- */
+body.dark-mode .badge-success { background: rgba(16,185,129,.15); color: #6ee7b7; }
+body.dark-mode .badge-warning { background: rgba(245,158,11,.15); color: #fcd34d; }
+body.dark-mode .badge-danger  { background: rgba(239,68,68,.15);  color: #fca5a5; }
+body.dark-mode .badge-info    { background: rgba(8,145,178,.15);  color: #67e8f9; }
+
+/* --- Dark: Stat cards (keep gradients but adjust shadow) --- */
+body.dark-mode .stat-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+
+/* --- Dark: Modal --- */
+body.dark-mode .modal-overlay {
+    background: rgba(0,0,0,.7);
+}
+body.dark-mode .modal {
+    background: #151d30;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+body.dark-mode .modal p small { color: #475569; }
+
+/* --- Dark: Smooth transition on theme change --- */
+body, .sidebar, .topbar, .card, .table-container, .modal,
+.form-group input, .form-group select, .form-group textarea,
+.btn-secondary, .alert, .badge, .theme-toggle {
+    transition: background-color .35s ease, color .35s ease,
+                border-color .35s ease, box-shadow .35s ease;
 }

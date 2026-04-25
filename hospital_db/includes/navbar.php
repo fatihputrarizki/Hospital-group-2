@@ -76,6 +76,10 @@ $pageTitles = [
         </div>
     </div>
     <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+            <i class='bx bx-sun' id="themeIconLight"></i>
+            <i class='bx bx-moon' id="themeIconDark"></i>
+        </button>
         <div class="topbar-info">
             <i class='bx bx-calendar'></i>
             <span><?= date('l, d F Y') ?></span>

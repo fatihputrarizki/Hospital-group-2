@@ -1,3 +1,18 @@
+// ===== DARK MODE =====
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+// Apply saved theme on page load (before DOMContentLoaded to prevent flash)
+(function() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+})();
+
 // ===== SIDEBAR TOGGLE =====
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -36,7 +51,7 @@ function updateClock() {
     el.querySelector('span').textContent = `${h}:${m}:${s}`;
 }
 
-// ===== AUTO HIDE ALERT =====
+// ===== DOM READY =====
 document.addEventListener('DOMContentLoaded', () => {
     // Alert auto-dismiss
     const alerts = document.querySelectorAll('.alert');
