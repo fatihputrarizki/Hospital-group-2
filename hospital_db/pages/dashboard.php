@@ -1,11 +1,11 @@
 <?php
-// Hitung statistik
+// Count statistics
 $total_patients     = mysqli_fetch_row(mysqli_query($conn, "SELECT COUNT(*) FROM patients"))[0];
 $total_doctors      = mysqli_fetch_row(mysqli_query($conn, "SELECT COUNT(*) FROM doctors"))[0];
 $total_appointments = mysqli_fetch_row(mysqli_query($conn, "SELECT COUNT(*) FROM appointments"))[0];
 $total_medications  = mysqli_fetch_row(mysqli_query($conn, "SELECT COUNT(*) FROM medications"))[0];
 
-// Jadwal hari ini
+// Today's appointments
 $today_appts = mysqli_query($conn, "
     SELECT a.*, p.name AS patient_name, d.name AS doctor_name
     FROM appointments a
@@ -27,50 +27,50 @@ $today_appts = mysqli_query($conn, "
         <div class="stat-icon">🧑‍⚕️</div>
         <div class="stat-info">
             <h3><?= $total_patients ?></h3>
-            <p>Total Pasien</p>
+            <p>Total Patients</p>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon">👨‍⚕️</div>
         <div class="stat-info">
             <h3><?= $total_doctors ?></h3>
-            <p>Total Dokter</p>
+            <p>Total Doctors</p>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon">📅</div>
         <div class="stat-info">
             <h3><?= $total_appointments ?></h3>
-            <p>Total Jadwal</p>
+            <p>Total Appointments</p>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon">💊</div>
         <div class="stat-info">
             <h3><?= $total_medications ?></h3>
-            <p>Jenis Obat</p>
+            <p>Medication Types</p>
         </div>
     </div>
 </div>
 
-<!-- JADWAL HARI INI -->
+<!-- TODAY'S APPOINTMENTS -->
 <div class="table-container">
     <div class="table-top">
-        <strong>📅 Jadwal Hari Ini</strong>
-        <a href="index.php?page=appointments" class="btn btn-primary btn-sm">Lihat Semua</a>
+        <strong>📅 Today's Appointments</strong>
+        <a href="index.php?page=appointments" class="btn btn-primary btn-sm">View All</a>
     </div>
     <table>
         <thead>
             <tr>
-                <th>Pasien</th>
-                <th>Dokter</th>
-                <th>Jam</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Time</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
         <?php if (mysqli_num_rows($today_appts) == 0): ?>
-            <tr><td colspan="4" style="text-align:center;color:#6b7280;padding:20px">Tidak ada jadwal hari ini</td></tr>
+            <tr><td colspan="4" style="text-align:center;color:#6b7280;padding:20px">No appointments today</td></tr>
         <?php else: ?>
             <?php while ($row = mysqli_fetch_assoc($today_appts)): ?>
             <tr>

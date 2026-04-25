@@ -15,9 +15,9 @@ if (isset($_POST['add_appt'])) {
     if ($patient_id && $doctor_id && $date) {
         mysqli_query($conn, "INSERT INTO appointments (patient_id, doctor_id, appointment_date, status, notes)
             VALUES ($patient_id, $doctor_id, '$date', '$status', '$notes')");
-        $msg = '<div class="alert alert-success">✅ Jadwal berhasil ditambahkan.</div>';
+        $msg = '<div class="alert alert-success">✅ Appointment added successfully.</div>';
     } else {
-        $msg = '<div class="alert alert-error">❌ Pasien, dokter, dan tanggal wajib diisi.</div>';
+        $msg = '<div class="alert alert-error">❌ Patient, doctor, and date are required.</div>';
     }
 }
 
@@ -33,13 +33,13 @@ if (isset($_POST['edit_appt'])) {
         patient_id=$patient_id, doctor_id=$doctor_id,
         appointment_date='$date', status='$status', notes='$notes'
         WHERE appointment_id=$id");
-    $msg = '<div class="alert alert-success">✅ Jadwal berhasil diperbarui.</div>';
+    $msg = '<div class="alert alert-success">✅ Appointment updated successfully.</div>';
 }
 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     mysqli_query($conn, "DELETE FROM appointments WHERE appointment_id=$id");
-    $msg = '<div class="alert alert-success">✅ Jadwal berhasil dihapus.</div>';
+    $msg = '<div class="alert alert-success">✅ Appointment deleted successfully.</div>';
 }
 
 $editData = null;
@@ -61,19 +61,19 @@ $appts    = mysqli_query($conn, "
 ?>
 
 <div class="page-header">
-    <h2>📅 Jadwal Perjanjian</h2>
+    <h2>📅 Appointments</h2>
 </div>
 
 <?= $msg ?>
 
 <div class="card">
-    <h3><?= $editData ? '✏️ Edit Jadwal' : '➕ Tambah Jadwal' ?></h3>
+    <h3><?= $editData ? '✏️ Edit Appointment' : '➕ Add Appointment' ?></h3>
     <form method="POST" action="index.php?page=appointments<?= $editData ? '&edit='.$editData['appointment_id'] : '' ?>">
         <div class="form-grid">
             <div class="form-group">
-                <label>Pasien *</label>
+                <label>Patient *</label>
                 <select name="patient_id" required>
-                    <option value="">-- Pilih Pasien --</option>
+                    <option value="">-- Select Patient --</option>
                     <?php
                     $plist = mysqli_query($conn, "SELECT patient_id, name FROM patients ORDER BY name");
                     while ($p = mysqli_fetch_assoc($plist)):
@@ -84,9 +84,9 @@ $appts    = mysqli_query($conn, "
                 </select>
             </div>
             <div class="form-group">
-                <label>Dokter *</label>
+                <label>Doctor *</label>
                 <select name="doctor_id" required>
-                    <option value="">-- Pilih Dokter --</option>
+                    <option value="">-- Select Doctor --</option>
                     <?php
                     $dlist = mysqli_query($conn, "SELECT doctor_id, name, specialization FROM doctors ORDER BY name");
                     while ($d = mysqli_fetch_assoc($dlist)):
@@ -97,7 +97,7 @@ $appts    = mysqli_query($conn, "
                 </select>
             </div>
             <div class="form-group">
-                <label>Tanggal & Jam *</label>
+                <label>Date & Time *</label>
                 <input type="datetime-local" name="appointment_date"
                     value="<?= $editData ? date('Y-m-d\TH:i', strtotime($editData['appointment_date'])) : '' ?>" required>
             </div>
@@ -110,16 +110,16 @@ $appts    = mysqli_query($conn, "
                 </select>
             </div>
             <div class="form-group" style="grid-column: 1 / -1">
-                <label>Catatan</label>
+                <label>Notes</label>
                 <input type="text" name="notes" value="<?= htmlspecialchars($editData['notes'] ?? '') ?>">
             </div>
         </div>
         <div class="form-actions" style="margin-top:14px">
             <?php if ($editData): ?>
-                <button type="submit" name="edit_appt" class="btn btn-warning">💾 Simpan Perubahan</button>
-                <a href="index.php?page=appointments" class="btn btn-secondary">Batal</a>
+                <button type="submit" name="edit_appt" class="btn btn-warning">💾 Save Changes</button>
+                <a href="index.php?page=appointments" class="btn btn-secondary">Cancel</a>
             <?php else: ?>
-                <button type="submit" name="add_appt" class="btn btn-primary">➕ Tambah Jadwal</button>
+                <button type="submit" name="add_appt" class="btn btn-primary">➕ Add Appointment</button>
             <?php endif; ?>
         </div>
     </form>
@@ -127,12 +127,12 @@ $appts    = mysqli_query($conn, "
 
 <div class="table-container">
     <div class="table-top">
-        <strong>Semua Jadwal</strong>
-        <input type="text" id="searchAppt" placeholder="🔍 Cari..." oninput="searchTable('searchAppt','apptTable')">
+        <strong>All Appointments</strong>
+        <input type="text" id="searchAppt" placeholder="🔍 Search..." oninput="searchTable('searchAppt','apptTable')">
     </div>
     <table id="apptTable">
         <thead>
-            <tr><th>#</th><th>Pasien</th><th>Dokter</th><th>Tanggal & Jam</th><th>Status</th><th>Catatan</th><th>Aksi</th></tr>
+            <tr><th>#</th><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Status</th><th>Notes</th><th>Actions</th></tr>
         </thead>
         <tbody>
         <?php
@@ -151,8 +151,8 @@ $appts    = mysqli_query($conn, "
                     <div class="action-btns">
                         <a href="index.php?page=appointments&edit=<?= $row['appointment_id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
                         <button class="btn btn-danger btn-sm"
-                            onclick="confirmDelete('index.php?page=appointments&delete=<?= $row['appointment_id'] ?>','jadwal <?= addslashes($row['patient_name']) ?>')">
-                            🗑️ Hapus
+                            onclick="confirmDelete('index.php?page=appointments&delete=<?= $row['appointment_id'] ?>','appointment for <?= addslashes($row['patient_name']) ?>')">
+                            🗑️ Delete
                         </button>
                     </div>
                 </td>

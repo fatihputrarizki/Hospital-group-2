@@ -14,9 +14,9 @@ if (isset($_POST['add_doctor'])) {
     if ($name && $spec) {
         mysqli_query($conn, "INSERT INTO doctors (name, specialization, phone, email)
             VALUES ('$name','$spec','$phone','$email')");
-        $msg = '<div class="alert alert-success">✅ Dokter berhasil ditambahkan.</div>';
+        $msg = '<div class="alert alert-success">✅ Doctor added successfully.</div>';
     } else {
-        $msg = '<div class="alert alert-error">❌ Nama dan spesialisasi wajib diisi.</div>';
+        $msg = '<div class="alert alert-error">❌ Name and specialization are required.</div>';
     }
 }
 
@@ -30,13 +30,13 @@ if (isset($_POST['edit_doctor'])) {
     mysqli_query($conn, "UPDATE doctors SET
         name='$name', specialization='$spec', phone='$phone', email='$email'
         WHERE doctor_id=$id");
-    $msg = '<div class="alert alert-success">✅ Data dokter berhasil diperbarui.</div>';
+    $msg = '<div class="alert alert-success">✅ Doctor data updated successfully.</div>';
 }
 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     mysqli_query($conn, "DELETE FROM doctors WHERE doctor_id=$id");
-    $msg = '<div class="alert alert-success">✅ Dokter berhasil dihapus.</div>';
+    $msg = '<div class="alert alert-success">✅ Doctor deleted successfully.</div>';
 }
 
 $editData = null;
@@ -50,25 +50,25 @@ $doctors = mysqli_query($conn, "SELECT * FROM doctors ORDER BY name");
 ?>
 
 <div class="page-header">
-    <h2>👨‍⚕️ Manajemen Dokter</h2>
+    <h2>👨‍⚕️ Doctor Management</h2>
 </div>
 
 <?= $msg ?>
 
 <div class="card">
-    <h3><?= $editData ? '✏️ Edit Dokter' : '➕ Tambah Dokter' ?></h3>
+    <h3><?= $editData ? '✏️ Edit Doctor' : '➕ Add Doctor' ?></h3>
     <form method="POST" action="index.php?page=doctors<?= $editData ? '&edit='.$editData['doctor_id'] : '' ?>">
         <div class="form-grid">
             <div class="form-group">
-                <label>Nama Dokter *</label>
+                <label>Doctor Name *</label>
                 <input type="text" name="name" value="<?= htmlspecialchars($editData['name'] ?? '') ?>" required>
             </div>
             <div class="form-group">
-                <label>Spesialisasi *</label>
+                <label>Specialization *</label>
                 <input type="text" name="specialization" value="<?= htmlspecialchars($editData['specialization'] ?? '') ?>" required>
             </div>
             <div class="form-group">
-                <label>No. Telepon</label>
+                <label>Phone Number</label>
                 <input type="text" name="phone" value="<?= htmlspecialchars($editData['phone'] ?? '') ?>">
             </div>
             <div class="form-group">
@@ -78,10 +78,10 @@ $doctors = mysqli_query($conn, "SELECT * FROM doctors ORDER BY name");
         </div>
         <div class="form-actions" style="margin-top:14px">
             <?php if ($editData): ?>
-                <button type="submit" name="edit_doctor" class="btn btn-warning">💾 Simpan Perubahan</button>
-                <a href="index.php?page=doctors" class="btn btn-secondary">Batal</a>
+                <button type="submit" name="edit_doctor" class="btn btn-warning">💾 Save Changes</button>
+                <a href="index.php?page=doctors" class="btn btn-secondary">Cancel</a>
             <?php else: ?>
-                <button type="submit" name="add_doctor" class="btn btn-primary">➕ Tambah Dokter</button>
+                <button type="submit" name="add_doctor" class="btn btn-primary">➕ Add Doctor</button>
             <?php endif; ?>
         </div>
     </form>
@@ -89,12 +89,12 @@ $doctors = mysqli_query($conn, "SELECT * FROM doctors ORDER BY name");
 
 <div class="table-container">
     <div class="table-top">
-        <strong>Daftar Dokter (<?= mysqli_num_rows($doctors) ?>)</strong>
-        <input type="text" id="searchDoc" placeholder="🔍 Cari dokter..." oninput="searchTable('searchDoc','doctorTable')">
+        <strong>Doctor List (<?= mysqli_num_rows($doctors) ?>)</strong>
+        <input type="text" id="searchDoc" placeholder="🔍 Search doctors..." oninput="searchTable('searchDoc','doctorTable')">
     </div>
     <table id="doctorTable">
         <thead>
-            <tr><th>#</th><th>Nama</th><th>Spesialisasi</th><th>Telepon</th><th>Email</th><th>Aksi</th></tr>
+            <tr><th>#</th><th>Name</th><th>Specialization</th><th>Phone</th><th>Email</th><th>Actions</th></tr>
         </thead>
         <tbody>
         <?php $no=1; while ($row = mysqli_fetch_assoc($doctors)): ?>
@@ -109,7 +109,7 @@ $doctors = mysqli_query($conn, "SELECT * FROM doctors ORDER BY name");
                         <a href="index.php?page=doctors&edit=<?= $row['doctor_id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
                         <button class="btn btn-danger btn-sm"
                             onclick="confirmDelete('index.php?page=doctors&delete=<?= $row['doctor_id'] ?>','<?= addslashes($row['name']) ?>')">
-                            🗑️ Hapus
+                            🗑️ Delete
                         </button>
                     </div>
                 </td>

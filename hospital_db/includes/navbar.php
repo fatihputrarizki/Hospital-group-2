@@ -3,22 +3,22 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 
 $menuItems = [
     ['key' => 'dashboard',     'icon' => 'bx bxs-dashboard',      'label' => 'Dashboard'],
-    ['key' => 'patients',      'icon' => 'bx bxs-user-detail',    'label' => 'Pasien'],
-    ['key' => 'doctors',       'icon' => 'bx bxs-first-aid',      'label' => 'Dokter'],
-    ['key' => 'appointments',  'icon' => 'bx bxs-calendar-check', 'label' => 'Jadwal'],
-    ['key' => 'records',       'icon' => 'bx bxs-file-doc',       'label' => 'Rekam Medis'],
-    ['key' => 'medications',   'icon' => 'bx bxs-capsule',        'label' => 'Obat'],
-    ['key' => 'prescriptions', 'icon' => 'bx bxs-notepad',        'label' => 'Resep'],
+    ['key' => 'patients',      'icon' => 'bx bxs-user-detail',    'label' => 'Patients'],
+    ['key' => 'doctors',       'icon' => 'bx bxs-first-aid',      'label' => 'Doctors'],
+    ['key' => 'appointments',  'icon' => 'bx bxs-calendar-check', 'label' => 'Appointments'],
+    ['key' => 'records',       'icon' => 'bx bxs-file-doc',       'label' => 'Medical Records'],
+    ['key' => 'medications',   'icon' => 'bx bxs-capsule',        'label' => 'Medications'],
+    ['key' => 'prescriptions', 'icon' => 'bx bxs-notepad',        'label' => 'Prescriptions'],
 ];
 
 $pageTitles = [
     'dashboard'     => 'Dashboard',
-    'patients'      => 'Manajemen Pasien',
-    'doctors'       => 'Manajemen Dokter',
-    'appointments'  => 'Jadwal Perjanjian',
-    'records'       => 'Rekam Medis',
-    'medications'   => 'Manajemen Obat',
-    'prescriptions' => 'Resep Obat',
+    'patients'      => 'Patient Management',
+    'doctors'       => 'Doctor Management',
+    'appointments'  => 'Appointments',
+    'records'       => 'Medical Records',
+    'medications'   => 'Medication Management',
+    'prescriptions' => 'Prescriptions',
 ];
 ?>
 
@@ -35,7 +35,7 @@ $pageTitles = [
     </div>
 
     <div class="sidebar-menu">
-        <p class="menu-label">MENU UTAMA</p>
+        <p class="menu-label">MAIN MENU</p>
         <ul>
             <?php foreach ($menuItems as $item): ?>
             <li>

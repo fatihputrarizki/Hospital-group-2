@@ -14,9 +14,9 @@ if (isset($_POST['add_med'])) {
     if ($name && $price >= 0) {
         mysqli_query($conn, "INSERT INTO medications (name, category, price, stock)
             VALUES ('$name','$cat',$price,$stock)");
-        $msg = '<div class="alert alert-success">✅ Obat berhasil ditambahkan.</div>';
+        $msg = '<div class="alert alert-success">✅ Medication added successfully.</div>';
     } else {
-        $msg = '<div class="alert alert-error">❌ Nama obat wajib diisi.</div>';
+        $msg = '<div class="alert alert-error">❌ Medication name is required.</div>';
     }
 }
 
@@ -30,13 +30,13 @@ if (isset($_POST['edit_med'])) {
     mysqli_query($conn, "UPDATE medications SET
         name='$name', category='$cat', price=$price, stock=$stock
         WHERE med_id=$id");
-    $msg = '<div class="alert alert-success">✅ Data obat berhasil diperbarui.</div>';
+    $msg = '<div class="alert alert-success">✅ Medication data updated successfully.</div>';
 }
 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     mysqli_query($conn, "DELETE FROM medications WHERE med_id=$id");
-    $msg = '<div class="alert alert-success">✅ Obat berhasil dihapus.</div>';
+    $msg = '<div class="alert alert-success">✅ Medication deleted successfully.</div>';
 }
 
 $editData = null;
@@ -50,38 +50,38 @@ $meds = mysqli_query($conn, "SELECT * FROM medications ORDER BY name");
 ?>
 
 <div class="page-header">
-    <h2>💊 Manajemen Obat</h2>
+    <h2>💊 Medication Management</h2>
 </div>
 
 <?= $msg ?>
 
 <div class="card">
-    <h3><?= $editData ? '✏️ Edit Obat' : '➕ Tambah Obat' ?></h3>
+    <h3><?= $editData ? '✏️ Edit Medication' : '➕ Add Medication' ?></h3>
     <form method="POST" action="index.php?page=medications<?= $editData ? '&edit='.$editData['med_id'] : '' ?>">
         <div class="form-grid">
             <div class="form-group">
-                <label>Nama Obat *</label>
+                <label>Medication Name *</label>
                 <input type="text" name="name" value="<?= htmlspecialchars($editData['name'] ?? '') ?>" required>
             </div>
             <div class="form-group">
-                <label>Kategori</label>
-                <input type="text" name="category" value="<?= htmlspecialchars($editData['category'] ?? '') ?>" placeholder="Analgesik, Antibiotik...">
+                <label>Category</label>
+                <input type="text" name="category" value="<?= htmlspecialchars($editData['category'] ?? '') ?>" placeholder="Analgesic, Antibiotic...">
             </div>
             <div class="form-group">
-                <label>Harga (Rp) *</label>
+                <label>Price (Rp) *</label>
                 <input type="number" name="price" min="0" step="500" value="<?= $editData['price'] ?? '0' ?>" required>
             </div>
             <div class="form-group">
-                <label>Stok</label>
+                <label>Stock</label>
                 <input type="number" name="stock" min="0" value="<?= $editData['stock'] ?? '0' ?>">
             </div>
         </div>
         <div class="form-actions" style="margin-top:14px">
             <?php if ($editData): ?>
-                <button type="submit" name="edit_med" class="btn btn-warning">💾 Simpan Perubahan</button>
-                <a href="index.php?page=medications" class="btn btn-secondary">Batal</a>
+                <button type="submit" name="edit_med" class="btn btn-warning">💾 Save Changes</button>
+                <a href="index.php?page=medications" class="btn btn-secondary">Cancel</a>
             <?php else: ?>
-                <button type="submit" name="add_med" class="btn btn-primary">➕ Tambah Obat</button>
+                <button type="submit" name="add_med" class="btn btn-primary">➕ Add Medication</button>
             <?php endif; ?>
         </div>
     </form>
@@ -89,12 +89,12 @@ $meds = mysqli_query($conn, "SELECT * FROM medications ORDER BY name");
 
 <div class="table-container">
     <div class="table-top">
-        <strong>Daftar Obat (<?= mysqli_num_rows($meds) ?>)</strong>
-        <input type="text" id="searchMed" placeholder="🔍 Cari obat..." oninput="searchTable('searchMed','medTable')">
+        <strong>Medication List (<?= mysqli_num_rows($meds) ?>)</strong>
+        <input type="text" id="searchMed" placeholder="🔍 Search medications..." oninput="searchTable('searchMed','medTable')">
     </div>
     <table id="medTable">
         <thead>
-            <tr><th>#</th><th>Nama Obat</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
+            <tr><th>#</th><th>Medication Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr>
         </thead>
         <tbody>
         <?php $no=1; while ($row = mysqli_fetch_assoc($meds)): ?>
@@ -112,7 +112,7 @@ $meds = mysqli_query($conn, "SELECT * FROM medications ORDER BY name");
                         <a href="index.php?page=medications&edit=<?= $row['med_id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
                         <button class="btn btn-danger btn-sm"
                             onclick="confirmDelete('index.php?page=medications&delete=<?= $row['med_id'] ?>','<?= addslashes($row['name']) ?>')">
-                            🗑️ Hapus
+                            🗑️ Delete
                         </button>
                     </div>
                 </td>

@@ -16,9 +16,9 @@ if (isset($_POST['add_patient'])) {
     if ($name && $gender && $birth) {
         mysqli_query($conn, "INSERT INTO patients (name, gender, birth_date, address, phone)
             VALUES ('$name','$gender','$birth','$addr','$phone')");
-        $msg = '<div class="alert alert-success">✅ Pasien berhasil ditambahkan.</div>';
+        $msg = '<div class="alert alert-success">✅ Patient added successfully.</div>';
     } else {
-        $msg = '<div class="alert alert-error">❌ Nama, jenis kelamin, dan tanggal lahir wajib diisi.</div>';
+        $msg = '<div class="alert alert-error">❌ Name, gender, and date of birth are required.</div>';
     }
 }
 
@@ -35,14 +35,14 @@ if (isset($_POST['edit_patient'])) {
         name='$name', gender='$gender', birth_date='$birth',
         address='$addr', phone='$phone'
         WHERE patient_id=$id");
-    $msg = '<div class="alert alert-success">✅ Data pasien berhasil diperbarui.</div>';
+    $msg = '<div class="alert alert-success">✅ Patient data updated successfully.</div>';
 }
 
 // --- DELETE ---
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     mysqli_query($conn, "DELETE FROM patients WHERE patient_id=$id");
-    $msg = '<div class="alert alert-success">✅ Pasien berhasil dihapus.</div>';
+    $msg = '<div class="alert alert-success">✅ Patient deleted successfully.</div>';
 }
 
 // --- GET EDIT DATA ---
@@ -58,68 +58,68 @@ $patients = mysqli_query($conn, "SELECT * FROM patients ORDER BY created_at DESC
 ?>
 
 <div class="page-header">
-    <h2>🧑‍⚕️ Manajemen Pasien</h2>
+    <h2>🧑‍⚕️ Patient Management</h2>
 </div>
 
 <?= $msg ?>
 
-<!-- FORM TAMBAH / EDIT -->
+<!-- ADD / EDIT FORM -->
 <div class="card">
-    <h3><?= $editData ? '✏️ Edit Pasien' : '➕ Tambah Pasien' ?></h3>
+    <h3><?= $editData ? '✏️ Edit Patient' : '➕ Add Patient' ?></h3>
     <form method="POST" action="index.php?page=patients<?= $editData ? '&edit='.$editData['patient_id'] : '' ?>">
         <div class="form-grid">
             <div class="form-group">
-                <label>Nama Lengkap *</label>
+                <label>Full Name *</label>
                 <input type="text" name="name" value="<?= htmlspecialchars($editData['name'] ?? '') ?>" required>
             </div>
             <div class="form-group">
-                <label>Jenis Kelamin *</label>
+                <label>Gender *</label>
                 <select name="gender" required>
-                    <option value="">-- Pilih --</option>
-                    <option value="Male"   <?= ($editData['gender']??'')==='Male'   ? 'selected':'' ?>>Laki-laki</option>
-                    <option value="Female" <?= ($editData['gender']??'')==='Female' ? 'selected':'' ?>>Perempuan</option>
+                    <option value="">-- Select --</option>
+                    <option value="Male"   <?= ($editData['gender']??'')==='Male'   ? 'selected':'' ?>>Male</option>
+                    <option value="Female" <?= ($editData['gender']??'')==='Female' ? 'selected':'' ?>>Female</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Tanggal Lahir *</label>
+                <label>Date of Birth *</label>
                 <input type="date" name="birth_date" value="<?= $editData['birth_date'] ?? '' ?>" required>
             </div>
             <div class="form-group">
-                <label>No. Telepon</label>
+                <label>Phone Number</label>
                 <input type="text" name="phone" value="<?= htmlspecialchars($editData['phone'] ?? '') ?>">
             </div>
             <div class="form-group" style="grid-column: 1 / -1">
-                <label>Alamat</label>
+                <label>Address</label>
                 <input type="text" name="address" value="<?= htmlspecialchars($editData['address'] ?? '') ?>">
             </div>
         </div>
         <div class="form-actions" style="margin-top:14px">
             <?php if ($editData): ?>
-                <button type="submit" name="edit_patient" class="btn btn-warning">💾 Simpan Perubahan</button>
-                <a href="index.php?page=patients" class="btn btn-secondary">Batal</a>
+                <button type="submit" name="edit_patient" class="btn btn-warning">💾 Save Changes</button>
+                <a href="index.php?page=patients" class="btn btn-secondary">Cancel</a>
             <?php else: ?>
-                <button type="submit" name="add_patient" class="btn btn-primary">➕ Tambah Pasien</button>
+                <button type="submit" name="add_patient" class="btn btn-primary">➕ Add Patient</button>
             <?php endif; ?>
         </div>
     </form>
 </div>
 
-<!-- TABEL DATA -->
+<!-- DATA TABLE -->
 <div class="table-container">
     <div class="table-top">
-        <strong>Daftar Pasien (<?= mysqli_num_rows($patients) ?>)</strong>
-        <input type="text" id="searchInput" placeholder="🔍 Cari pasien..." oninput="searchTable('searchInput','patientTable')">
+        <strong>Patient List (<?= mysqli_num_rows($patients) ?>)</strong>
+        <input type="text" id="searchInput" placeholder="🔍 Search patients..." oninput="searchTable('searchInput','patientTable')">
     </div>
     <table id="patientTable">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Nama</th>
-                <th>Jenis Kelamin</th>
-                <th>Tanggal Lahir</th>
-                <th>No. Telepon</th>
-                <th>Alamat</th>
-                <th>Aksi</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -130,7 +130,7 @@ $patients = mysqli_query($conn, "SELECT * FROM patients ORDER BY created_at DESC
             <tr>
                 <td><?= $no++ ?></td>
                 <td><?= htmlspecialchars($row['name']) ?></td>
-                <td><?= $row['gender'] === 'Male' ? '👨 Laki-laki' : '👩 Perempuan' ?></td>
+                <td><?= $row['gender'] === 'Male' ? '👨 Male' : '👩 Female' ?></td>
                 <td><?= date('d M Y', strtotime($row['birth_date'])) ?></td>
                 <td><?= htmlspecialchars($row['phone'] ?: '-') ?></td>
                 <td><?= htmlspecialchars($row['address'] ?: '-') ?></td>
@@ -139,7 +139,7 @@ $patients = mysqli_query($conn, "SELECT * FROM patients ORDER BY created_at DESC
                         <a href="index.php?page=patients&edit=<?= $row['patient_id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
                         <button class="btn btn-danger btn-sm"
                             onclick="confirmDelete('index.php?page=patients&delete=<?= $row['patient_id'] ?>','<?= addslashes($row['name']) ?>')">
-                            🗑️ Hapus
+                            🗑️ Delete
                         </button>
                     </div>
                 </td>

@@ -14,9 +14,9 @@ if (isset($_POST['add_prescription'])) {
     if ($record_id && $med_id && $dosage) {
         mysqli_query($conn, "INSERT INTO prescriptions (record_id, med_id, dosage, duration_days)
             VALUES ($record_id, $med_id, '$dosage', $duration)");
-        $msg = '<div class="alert alert-success">✅ Resep berhasil ditambahkan.</div>';
+        $msg = '<div class="alert alert-success">✅ Prescription added successfully.</div>';
     } else {
-        $msg = '<div class="alert alert-error">❌ Semua kolom wajib diisi.</div>';
+        $msg = '<div class="alert alert-error">❌ All required fields must be filled in.</div>';
     }
 }
 
@@ -30,13 +30,13 @@ if (isset($_POST['edit_prescription'])) {
     mysqli_query($conn, "UPDATE prescriptions SET
         record_id=$record_id, med_id=$med_id, dosage='$dosage', duration_days=$duration
         WHERE prescription_id=$id");
-    $msg = '<div class="alert alert-success">✅ Resep berhasil diperbarui.</div>';
+    $msg = '<div class="alert alert-success">✅ Prescription updated successfully.</div>';
 }
 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     mysqli_query($conn, "DELETE FROM prescriptions WHERE prescription_id=$id");
-    $msg = '<div class="alert alert-success">✅ Resep berhasil dihapus.</div>';
+    $msg = '<div class="alert alert-success">✅ Prescription deleted successfully.</div>';
 }
 
 $editData = null;
@@ -64,19 +64,19 @@ $meds = mysqli_query($conn, "SELECT med_id, name FROM medications ORDER BY name"
 ?>
 
 <div class="page-header">
-    <h2>📝 Resep Obat</h2>
+    <h2>📝 Prescriptions</h2>
 </div>
 
 <?= $msg ?>
 
 <div class="card">
-    <h3><?= $editData ? '✏️ Edit Resep' : '➕ Tambah Resep' ?></h3>
+    <h3><?= $editData ? '✏️ Edit Prescription' : '➕ Add Prescription' ?></h3>
     <form method="POST" action="index.php?page=prescriptions<?= $editData ? '&edit='.$editData['prescription_id'] : '' ?>">
         <div class="form-grid">
             <div class="form-group">
-                <label>Rekam Medis (Pasien - Diagnosa) *</label>
+                <label>Medical Record (Patient – Diagnosis) *</label>
                 <select name="record_id" required>
-                    <option value="">-- Pilih Rekam Medis --</option>
+                    <option value="">-- Select Medical Record --</option>
                     <?php
                     $rlist = mysqli_query($conn, "
                         SELECT mr.record_id, p.name, mr.diagnosis, mr.record_date
@@ -94,9 +94,9 @@ $meds = mysqli_query($conn, "SELECT med_id, name FROM medications ORDER BY name"
                 </select>
             </div>
             <div class="form-group">
-                <label>Obat *</label>
+                <label>Medication *</label>
                 <select name="med_id" required>
-                    <option value="">-- Pilih Obat --</option>
+                    <option value="">-- Select Medication --</option>
                     <?php
                     $mlist = mysqli_query($conn, "SELECT med_id, name FROM medications ORDER BY name");
                     while ($m = mysqli_fetch_assoc($mlist)):
@@ -107,20 +107,20 @@ $meds = mysqli_query($conn, "SELECT med_id, name FROM medications ORDER BY name"
                 </select>
             </div>
             <div class="form-group">
-                <label>Dosis *</label>
-                <input type="text" name="dosage" value="<?= htmlspecialchars($editData['dosage'] ?? '') ?>" placeholder="3x1 sehari" required>
+                <label>Dosage *</label>
+                <input type="text" name="dosage" value="<?= htmlspecialchars($editData['dosage'] ?? '') ?>" placeholder="3x1 daily" required>
             </div>
             <div class="form-group">
-                <label>Durasi (hari)</label>
+                <label>Duration (days)</label>
                 <input type="number" name="duration_days" min="1" value="<?= $editData['duration_days'] ?? 7 ?>">
             </div>
         </div>
         <div class="form-actions" style="margin-top:14px">
             <?php if ($editData): ?>
-                <button type="submit" name="edit_prescription" class="btn btn-warning">💾 Simpan Perubahan</button>
-                <a href="index.php?page=prescriptions" class="btn btn-secondary">Batal</a>
+                <button type="submit" name="edit_prescription" class="btn btn-warning">💾 Save Changes</button>
+                <a href="index.php?page=prescriptions" class="btn btn-secondary">Cancel</a>
             <?php else: ?>
-                <button type="submit" name="add_prescription" class="btn btn-primary">➕ Tambah Resep</button>
+                <button type="submit" name="add_prescription" class="btn btn-primary">➕ Add Prescription</button>
             <?php endif; ?>
         </div>
     </form>
@@ -128,12 +128,12 @@ $meds = mysqli_query($conn, "SELECT med_id, name FROM medications ORDER BY name"
 
 <div class="table-container">
     <div class="table-top">
-        <strong>Semua Resep</strong>
-        <input type="text" id="searchPres" placeholder="🔍 Cari..." oninput="searchTable('searchPres','presTable')">
+        <strong>All Prescriptions</strong>
+        <input type="text" id="searchPres" placeholder="🔍 Search..." oninput="searchTable('searchPres','presTable')">
     </div>
     <table id="presTable">
         <thead>
-            <tr><th>#</th><th>Pasien</th><th>Diagnosa</th><th>Obat</th><th>Dosis</th><th>Durasi</th><th>Aksi</th></tr>
+            <tr><th>#</th><th>Patient</th><th>Diagnosis</th><th>Medication</th><th>Dosage</th><th>Duration</th><th>Actions</th></tr>
         </thead>
         <tbody>
         <?php $no=1; while ($row = mysqli_fetch_assoc($prescriptions)): ?>
@@ -143,13 +143,13 @@ $meds = mysqli_query($conn, "SELECT med_id, name FROM medications ORDER BY name"
                 <td><?= htmlspecialchars($row['diagnosis']) ?></td>
                 <td><?= htmlspecialchars($row['med_name']) ?></td>
                 <td><?= htmlspecialchars($row['dosage']) ?></td>
-                <td><?= $row['duration_days'] ?> hari</td>
+                <td><?= $row['duration_days'] ?> days</td>
                 <td>
                     <div class="action-btns">
                         <a href="index.php?page=prescriptions&edit=<?= $row['prescription_id'] ?>" class="btn btn-warning btn-sm">✏️ Edit</a>
                         <button class="btn btn-danger btn-sm"
-                            onclick="confirmDelete('index.php?page=prescriptions&delete=<?= $row['prescription_id'] ?>','resep <?= addslashes($row['patient_name']) ?>')">
-                            🗑️ Hapus
+                            onclick="confirmDelete('index.php?page=prescriptions&delete=<?= $row['prescription_id'] ?>','prescription for <?= addslashes($row['patient_name']) ?>')">
+                            🗑️ Delete
                         </button>
                     </div>
                 </td>
